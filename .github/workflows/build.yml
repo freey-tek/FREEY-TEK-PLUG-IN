@@ -1,0 +1,24 @@
+name: Build Plugin
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Checkout JUCE
+        run: git clone --depth 1 https://github.com/juce-framework/JUCE.git
+
+      - name: Configure CMake
+        run: cmake -B build -G "Visual Studio 17 2022"
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - name: Upload VST3 Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: FREE-TEK-Plugin-VST3
+          path: build/FREE_TEK_PLUGIN_artefacts/Release/VST3/
